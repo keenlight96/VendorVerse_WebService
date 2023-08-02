@@ -1,6 +1,7 @@
 package com.webservice.service.impl;
 
 import com.webservice.model.*;
+import com.webservice.model.dto.BillDTO;
 import com.webservice.model.dto.BillDetailDTO;
 import com.webservice.repository.IBillDetailRepository;
 import com.webservice.repository.IBillRepository;
@@ -10,6 +11,7 @@ import com.webservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +30,8 @@ public class BillDetailServiceImpl implements IBillDetailService {
 
     @Autowired
     IImageService iImageService;
+    @Autowired
+    IBillRepository iBillRepository;
 
     @Override
     public List<BillDetail> getAll() {
@@ -77,9 +81,23 @@ public class BillDetailServiceImpl implements IBillDetailService {
         Image image = iImageService.getImageByProduct(billDetail.getProduct());
         return new BillDetailDTO(billDetail.getId(), billDetail.getProduct(), billDetail.getBill(), billDetail.getQuantity(), image);
     }
+
     @Override
-    public List<BillDetail> getByBill(Bill bill){
+    public List<BillDetail> getByBill(Bill bill) {
         return iBillDetailRepository.findAllByBill(bill);
     }
 
+    @Override
+    public BillDTO getDtoByBill(Account customer, int idStatus) {
+        List<Bill> bills = iBillRepository.findAllByCustomerAndStatusId(customer, idStatus);
+        List<BillDetailDTO> billDetailDTOs = new ArrayList<>();
+
+        for (int i = 0; i < bills.size(); i++) {
+            List<BillDetail> billDetails = getByBill(bills.get(i));
+            for (int j = 0; j < billDetails.size(); j++) {
+                billDetailDTOs.add(getDtoByBillDetail(billDetails.get(j)));
+            }
+        }
+        return new BillDTO(bills, billDetailDTOs);
+    }
 }

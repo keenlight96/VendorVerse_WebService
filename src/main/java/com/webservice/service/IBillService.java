@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IBillService extends ICrudService<Bill> {
     List<Bill> findByCustomerAndVendor(Account customer, Account vendor, int idStatus);
-    BillDTO getDtoByBill(Account customer, int idStatus);
+
 }

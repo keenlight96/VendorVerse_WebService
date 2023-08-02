@@ -20,8 +20,6 @@ import java.util.List;
 public class BillServiceImpl implements IBillService {
     @Autowired
     IBillRepository iBillRepository;
-    @Autowired
-    IBillDetailService iBillDetailService;
 
     @Override
     public List<Bill> getAll() {
@@ -53,17 +51,5 @@ public class BillServiceImpl implements IBillService {
         return iBillRepository.findByCustomerAndVendor(customer, vendor, idStatus);
     }
 
-    @Override
-    public BillDTO getDtoByBill(Account customer, int idStatus) {
-        List<Bill> bills = iBillRepository.findAllByCustomerAndStatusId(customer, idStatus);
-        List<BillDetailDTO> billDetailDTOs = new ArrayList<>();
 
-        for (int i = 0; i < bills.size(); i++) {
-            List<BillDetail> billDetails = iBillDetailService.getByBill(bills.get(i));
-            for (int j = 0; j < billDetails.size(); j++) {
-                billDetailDTOs.add(iBillDetailService.getDtoByBillDetail(billDetails.get(j)));
-            }
-        }
-        return new BillDTO(bills, billDetailDTOs);
-    }
 }
