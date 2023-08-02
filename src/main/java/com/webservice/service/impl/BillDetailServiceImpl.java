@@ -1,8 +1,12 @@
 package com.webservice.service.impl;
 
-import com.webservice.model.BillDetail;
+import com.webservice.model.*;
+import com.webservice.model.dto.BillDetailDTO;
 import com.webservice.repository.IBillDetailRepository;
-import com.webservice.service.IBillDetailService;
+import com.webservice.repository.IBillRepository;
+import com.webservice.repository.IBillStatusRepository;
+import com.webservice.repository.IProductRepository;
+import com.webservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,18 @@ import java.util.List;
 public class BillDetailServiceImpl implements IBillDetailService {
     @Autowired
     IBillDetailRepository iBillDetailRepository;
+
+    @Autowired
+    IBillStatusService iBillStatusService;
+
+    @Autowired
+    IBillService iBillService;
+
+    @Autowired
+    IProductService iProductService;
+
+    @Autowired
+    IImageService iImageService;
 
     @Override
     public List<BillDetail> getAll() {
@@ -37,4 +53,33 @@ public class BillDetailServiceImpl implements IBillDetailService {
     public void deleteById(int id) {
         iBillDetailRepository.deleteById(id);
     }
+
+    @Override
+    public BillDetail addBillDetail(BillDetail billDetail, Account account) {
+        Product product = iProductService.getById(billDetail.getProduct().getId());
+        Bill bill = iBillService.findByCustomerAndVendor(account, product.getAccount(), 1).get(0);
+        if (bill == null) {
+            Bill bill1 = iBillService.create(new Bill(product.getAccount(), account, new BillStatus(1)));
+            return iBillDetailRepository.save(new BillDetail(product, bill1, billDetail.getQuantity()));
+        } else {
+            BillDetail billDetail1 = iBillDetailRepository.findByBillAndProduct(bill, product);
+            if (billDetail1 != null) {
+                billDetail1.setQuantity(billDetail1.getQuantity() + billDetail.getQuantity());
+                return billDetail1;
+            } else {
+                return iBillDetailRepository.save(new BillDetail(product, bill, billDetail.getQuantity()));
+            }
+        }
+    }
+
+    @Override
+    public BillDetailDTO getDtoByBillDetail(BillDetail billDetail) {
+        Image image = iImageService.getImageByProduct(billDetail.getProduct());
+        return new BillDetailDTO(billDetail.getId(), billDetail.getProduct(), billDetail.getBill(), billDetail.getQuantity(), image);
+    }
+    @Override
+    public List<BillDetail> getByBill(Bill bill){
+        return iBillDetailRepository.findAllByBill(bill);
+    }
+
 }

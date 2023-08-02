@@ -21,4 +21,10 @@ public class Bill {
     private Account customer;
     @ManyToOne
     private BillStatus status;
+
+    public Bill(Account vendor, Account customer, BillStatus status) {
+        this.vendor = vendor;
+        this.customer = customer;
+        this.status = status;
+    }
 }
