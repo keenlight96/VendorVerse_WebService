@@ -15,4 +15,6 @@ public interface IAccountService extends UserDetailsService {
     Account edit(Account account);
     void deleteById (int id);
     Account checkRegister(Account account);
+
+    Account getAccountLogin(String username, String password);
 }
