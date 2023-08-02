@@ -1,6 +1,7 @@
 package com.webservice.service.impl;
 
 import com.webservice.model.Image;
+import com.webservice.model.Product;
 import com.webservice.repository.IImageRepository;
 import com.webservice.service.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,10 @@ public class ImageServiceImpl implements IImageService {
     @Override
     public void deleteById(int id) {
         iImageRepository.deleteById(id);
+    }
+
+    @Override
+    public Image getImageByProduct(Product product) {
+        return iImageRepository.findByProduct(product).get(0);
     }
 }

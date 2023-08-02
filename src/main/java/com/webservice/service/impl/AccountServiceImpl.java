@@ -60,4 +60,9 @@ public class AccountServiceImpl implements IAccountService {
         roles.add(account.getRole());
         return new User(account.getUsername(), account.getPassword(), roles);
     }
+
+    @Override
+    public Account getAccountByUsername(String username) {
+        return iAccountRepository.findByUsername(username);
+    }
 }
