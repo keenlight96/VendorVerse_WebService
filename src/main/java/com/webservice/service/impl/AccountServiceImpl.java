@@ -37,4 +37,14 @@ public class AccountServiceImpl implements IAccountService {
     public void deleteById(int id) {
         iAccountRepository.deleteById(id);
     }
+
+    @Override
+    public Account checkRegister(Account account) {
+        Account account1 = iAccountRepository.findByUsername(account.getUsername());
+        if (account1 != null || account.getPassword().isEmpty()) {
+            return null;
+        } else {
+            return iAccountRepository.save(account);
+        }
+    }
 }

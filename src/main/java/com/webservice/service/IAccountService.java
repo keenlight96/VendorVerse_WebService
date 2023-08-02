@@ -6,4 +6,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface IAccountService extends ICrudService<Account> {
+    Account checkRegister(Account account);
 }
