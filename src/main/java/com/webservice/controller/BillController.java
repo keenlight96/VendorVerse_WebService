@@ -20,8 +20,8 @@ import java.util.List;
 public class BillController {
     @Autowired
     IBillService iBillService;
-//    @Autowired
-//    IAccountService iAccountService;
+    @Autowired
+    IAccountService iAccountService;
 
     @Autowired
     IBillDetailService iBillDetailService;
@@ -51,6 +51,23 @@ public class BillController {
     @GetMapping("/{id}")
     public ResponseEntity<Bill> findBillById(@PathVariable int id) {
         return new ResponseEntity<>(iBillService.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/vendor")
+    public ResponseEntity<List<Bill>> getAllBillOfVendor() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
+        return new ResponseEntity<>(iBillService.getAllByVendor(account), HttpStatus.OK);
+    }
+
+    @PostMapping("/vendor/accept/{id}")
+    public ResponseEntity<Bill> acceptBill(@PathVariable int id) {
+        return new ResponseEntity<>(iBillService.acceptBill(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/vendor/reject/{id}")
+    public ResponseEntity<Bill> rejectBill(@PathVariable int id) {
+        return new ResponseEntity<>(iBillService.rejectBill(id), HttpStatus.OK);
     }
 
     @PostMapping("/payTheBill")

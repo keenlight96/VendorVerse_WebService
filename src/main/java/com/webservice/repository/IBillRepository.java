@@ -16,4 +16,5 @@ public interface IBillRepository extends JpaRepository<Bill, Integer> {
                                        @Param("idVendor") int idVendor, @Param("idStatus") int id);
     List<Bill> findAllByCustomerAndVendorAndStatusId(Account customer, Account vendor, int id);
     List<Bill> findAllByCustomerAndStatusId(Account customer,int idStatus);
+    List<Bill> findAllByVendor(Account vendor);
 }
