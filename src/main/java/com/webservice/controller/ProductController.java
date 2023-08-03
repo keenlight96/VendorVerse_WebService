@@ -1,12 +1,17 @@
 package com.webservice.controller;
 
+import com.webservice.model.Account;
 import com.webservice.model.Product;
+import com.webservice.model.dto.ProductDTO;
+import com.webservice.service.IAccountService;
 import com.webservice.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,11 +20,21 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     @Autowired
     IProductService iProductService;
+    @Autowired
+    IAccountService iAccountService;
 
     @GetMapping
     public ResponseEntity<Page<Product>> getAll(@RequestParam(defaultValue = "0") int page) {
         Page<Product> productPage = iProductService.getAll(PageRequest.of(page, 2));
         return new ResponseEntity<>(productPage, HttpStatus.OK);
+    }
+
+    @GetMapping("/vendor")
+    public ResponseEntity<Page<ProductDTO>> getAllDTOByVendor(@RequestParam(defaultValue = "0") int page) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
+        Page<ProductDTO> productDTOPage = iProductService.getAllDTOByCurrentVendor(PageRequest.of(page, 3), account);
+        return new ResponseEntity<>(productDTOPage, HttpStatus.OK);
     }
 
     @PostMapping
