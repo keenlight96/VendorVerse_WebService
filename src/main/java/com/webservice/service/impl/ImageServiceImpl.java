@@ -41,6 +41,10 @@ public class ImageServiceImpl implements IImageService {
 
     @Override
     public Image getImageByProduct(Product product) {
-        return iImageRepository.findByProduct(product).get(0);
+        List<Image> images = iImageRepository.findByProduct(product);
+        if (images.isEmpty())
+            return null;
+        else
+            return images.get(0);
     }
 }

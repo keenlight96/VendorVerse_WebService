@@ -33,7 +33,7 @@ public class ProductController {
     public ResponseEntity<Page<ProductDTO>> getAllDTOByVendor(@RequestParam(defaultValue = "0") int page) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
-        Page<ProductDTO> productDTOPage = iProductService.getAllDTOByCurrentVendor(PageRequest.of(page, 3), account);
+        Page<ProductDTO> productDTOPage = iProductService.getAllDTOByCurrentVendor(PageRequest.of(page, 100), account);
         return new ResponseEntity<>(productDTOPage, HttpStatus.OK);
     }
 
@@ -55,5 +55,13 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> findProductById(@PathVariable int id) {
         return new ResponseEntity<>(iProductService.getById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/vendor")
+    public ResponseEntity<Product> createProductOfVendor(@RequestBody Product product) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
+        product.setAccount(account);
+        return new ResponseEntity<>(iProductService.create(product), HttpStatus.OK);
     }
 }
