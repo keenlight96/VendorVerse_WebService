@@ -3,6 +3,8 @@ package com.webservice.controller;
 import com.webservice.model.Account;
 import com.webservice.model.Bill;
 import com.webservice.model.BillDetail;
+import com.webservice.model.dto.BillDTO;
+import com.webservice.model.dto.BillDetailDTO;
 import com.webservice.service.IAccountService;
 import com.webservice.service.IBillDetailService;
 import com.webservice.service.IBillService;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,17 +29,34 @@ public class BillDetailController {
     IAccountService iAccountService;
 
     @PostMapping("/addBillDetail")
-    public ResponseEntity<?> addBillDetail(@RequestBody BillDetail billDetail){
+    public ResponseEntity<?> addBillDetail(@RequestBody BillDetail billDetail) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
-        return new ResponseEntity<>(iBillDetailService.addBillDetail(billDetail,account), HttpStatus.OK);
+        Account customer = iAccountService.getAccountByUsername(userDetails.getUsername());
+        return new ResponseEntity<>(iBillDetailService.addBillDetail(billDetail, customer), HttpStatus.OK);
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<BillDetail>> getAll() {
+    @PostMapping("/byStatus")
+    public ResponseEntity<BillDTO> getAllBillDetail(@RequestParam int idStatus) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account customer = iAccountService.getAccountByUsername(userDetails.getUsername());
+        return new ResponseEntity<>(iBillDetailService.getDtoByBill(customer, idStatus), HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(iBillDetailService.getAll(), HttpStatus.OK);
+    @PostMapping("/deleteProductByCart")
+    public ResponseEntity<?> deleteProductByCart(@RequestParam int idBillDetail) {
+        iBillDetailService.deleteById(idBillDetail);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/getByBill")
+    public List<BillDetailDTO> getByBill(@RequestBody Bill bill) {
+        return iBillDetailService.getBillDetailDtoByBill(bill);
+    }
+
+    @PostMapping("/updateQuantityBillDetail")
+    public void updateQuantityBillDetail(@RequestBody BillDetailDTO billDetailDTO) {
+        iBillDetailService.updateQuantity(billDetailDTO.getQuantity(), billDetailDTO.getId());
     }
 
     @PostMapping

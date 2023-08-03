@@ -20,7 +20,7 @@ public class BillStatusServiceImpl implements IBillStatusService {
 
     @Override
     public BillStatus getById(int id) {
-        return iBillStatusRepository.findById(id).get();
+        return iBillStatusRepository.findById(id);
     }
 
     @Override

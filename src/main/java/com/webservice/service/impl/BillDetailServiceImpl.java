@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -61,7 +62,13 @@ public class BillDetailServiceImpl implements IBillDetailService {
     @Override
     public BillDetail addBillDetail(BillDetail billDetail, Account account) {
         Product product = iProductService.getById(billDetail.getProduct().getId());
-        Bill bill = iBillService.findByCustomerAndVendor(account, product.getAccount(), 1).get(0);
+        List<Bill> bills = iBillService.findByCustomerAndVendor(account, product.getAccount(), 1);
+        Bill bill;
+        if (bills.isEmpty()) {
+            bill = null;
+        } else {
+            bill = bills.get(0);
+        }
         if (bill == null) {
             Bill bill1 = iBillService.create(new Bill(product.getAccount(), account, new BillStatus(1)));
             return iBillDetailRepository.save(new BillDetail(product, bill1, billDetail.getQuantity()));
@@ -99,5 +106,46 @@ public class BillDetailServiceImpl implements IBillDetailService {
             }
         }
         return new BillDTO(bills, billDetailDTOs);
+    }
+
+    @Override
+    public void updateQuantity(int quantity, int id) {
+        iBillDetailRepository.updateQuantity(quantity, id);
+    }
+
+    @Override
+    public Bill payTheBill(int idBill) {
+        Bill bill = iBillService.getById(idBill);
+        List<BillDetail> billDetails = iBillDetailRepository.findAllByBill(bill);
+        boolean check = false;
+        for (BillDetail bdt : billDetails) {
+            Product product = iProductService.getById(bdt.getProduct().getId());
+            if (product.getQuantity() >= bdt.getQuantity()) {
+                check = true;
+            } else {
+                check = false;
+            }
+        }
+        if (check) {
+            bill.setDate(new Date());
+            BillStatus billStatus = iBillStatusService.getById(2);
+            bill.setStatus(billStatus);
+            for (BillDetail bdt : billDetails) {
+                Product product = iProductService.getById(bdt.getProduct().getId());
+                product.setQuantity(product.getQuantity() - bdt.getQuantity());
+                iProductService.create(product);
+            }
+            return iBillRepository.save(bill);
+        } else return null;
+    }
+
+    @Override
+    public List<BillDetailDTO> getBillDetailDtoByBill(Bill bill) {
+        List<BillDetailDTO> billDetailDTOs = new ArrayList<>();
+        List<BillDetail> billDetails = getByBill(bill);
+        for (BillDetail b : billDetails) {
+            billDetailDTOs.add(getDtoByBillDetail(b));
+        }
+        return billDetailDTOs;
     }
 }
