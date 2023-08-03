@@ -8,5 +8,8 @@ import java.util.List;
 
 public interface IBillService extends ICrudService<Bill> {
     List<Bill> findByCustomerAndVendor(Account customer, Account vendor, int idStatus);
+    List<Bill> getAllByVendor(Account vendor);
+    Bill acceptBill(int id);
+    Bill rejectBill(int id);
 
 }

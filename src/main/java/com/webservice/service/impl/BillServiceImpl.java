@@ -51,5 +51,24 @@ public class BillServiceImpl implements IBillService {
         return iBillRepository.findByCustomerAndVendor(customer, vendor, idStatus);
     }
 
+    @Override
+    public List<Bill> getAllByVendor(Account vendor) {
+        return iBillRepository.findAllByVendor(vendor);
+    }
+
+    @Override
+    public Bill acceptBill(int id) {
+        Bill bill = getById(id);
+        bill.setStatus(new BillStatus(3));
+        return iBillRepository.save(bill);
+    }
+
+    @Override
+    public Bill rejectBill(int id) {
+        Bill bill = getById(id);
+        bill.setStatus(new BillStatus(4));
+        return iBillRepository.save(bill);
+    }
+
 
 }
