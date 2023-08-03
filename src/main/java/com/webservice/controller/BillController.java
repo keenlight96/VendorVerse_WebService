@@ -20,16 +20,16 @@ import java.util.List;
 public class BillController {
     @Autowired
     IBillService iBillService;
-    @Autowired
-    IAccountService iAccountService;
+//    @Autowired
+//    IAccountService iAccountService;
 
     @Autowired
     IBillDetailService iBillDetailService;
+
     @GetMapping
     public ResponseEntity<List<Bill>> getAll() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
-
+//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
         return new ResponseEntity<>(iBillService.getAll(), HttpStatus.OK);
     }
 
@@ -51,5 +51,12 @@ public class BillController {
     @GetMapping("/{id}")
     public ResponseEntity<Bill> findBillById(@PathVariable int id) {
         return new ResponseEntity<>(iBillService.getById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/payTheBill")
+    public ResponseEntity<?> payTheBill(@RequestParam int idBill) {
+        if (iBillDetailService.payTheBill(idBill) != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -11,9 +11,9 @@ import java.util.List;
 
 @Repository
 public interface IBillRepository extends JpaRepository<Bill, Integer> {
-    @Query("select b from Bill b WHERE b.customer = :customer and b.vendor = :vendor and b.status.id = :idStatus")
-    List<Bill> findByCustomerAndVendor(@Param("customer") Account customer,
-                                       @Param("vendor") Account vendor, @Param("idStatus") int id);
-
+    @Query("select b from Bill b WHERE b.customer.id = :idCustomer and b.vendor.id = :idVendor and b.status.id = :idStatus")
+    List<Bill> findByCustomerAndVendor(@Param("idCustomer") int idCustomer,
+                                       @Param("idVendor") int idVendor, @Param("idStatus") int id);
+    List<Bill> findAllByCustomerAndVendorAndStatusId(Account customer, Account vendor, int id);
     List<Bill> findAllByCustomerAndStatusId(Account customer,int idStatus);
 }
