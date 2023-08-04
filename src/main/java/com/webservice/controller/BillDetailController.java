@@ -35,7 +35,6 @@ public class BillDetailController {
 
     @GetMapping
     public ResponseEntity<List<BillDetail>> getAll() {
-
         return new ResponseEntity<>(iBillDetailService.getAll(), HttpStatus.OK);
     }
 

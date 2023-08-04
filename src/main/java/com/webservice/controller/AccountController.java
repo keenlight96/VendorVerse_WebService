@@ -26,12 +26,12 @@ public class AccountController {
         return new ResponseEntity<>(iAccountService.create(account), HttpStatus.OK);
     }
 
-    @PutMapping
+    @PostMapping("/edit")
     public ResponseEntity<Account> editAccount(@RequestBody Account account) {
         return new ResponseEntity<>(iAccountService.edit(account), HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @PostMapping ("/delete")
     public void deleteAccount(@RequestBody Account account) {
         iAccountService.deleteById(account.getId());
     }
