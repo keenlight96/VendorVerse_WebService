@@ -1,6 +1,7 @@
 package com.webservice.controller;
 
 import com.webservice.model.Category;
+import com.webservice.model.dto.ParentDTO;
 import com.webservice.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,12 +27,12 @@ public class CategoryController {
         return new ResponseEntity<>(iCategoryService.create(category), HttpStatus.OK);
     }
 
-    @PutMapping
+    @PostMapping("/edit")
     public ResponseEntity<Category> editCategory(@RequestBody Category category) {
         return new ResponseEntity<>(iCategoryService.edit(category), HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @PostMapping("/delete")
     public void deleteCategory(@RequestBody Category category) {
         iCategoryService.deleteById(category.getId());
     }
@@ -39,5 +40,10 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<Category> findCategoryById(@PathVariable int id) {
         return new ResponseEntity<>(iCategoryService.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/listParenDTO")
+    public ResponseEntity<List<ParentDTO>> getAllParentDTO() {
+        return new ResponseEntity<>(iCategoryService.getAllParentDTO(), HttpStatus.OK);
     }
 }
