@@ -76,7 +76,7 @@ public class BillDetailServiceImpl implements IBillDetailService {
             BillDetail billDetail1 = iBillDetailRepository.findByBillAndProduct(bill, product);
             if (billDetail1 != null) {
                 billDetail1.setQuantity(billDetail1.getQuantity() + billDetail.getQuantity());
-                return billDetail1;
+                return iBillDetailRepository.save(billDetail1);
             } else {
                 return iBillDetailRepository.save(new BillDetail(product, bill, billDetail.getQuantity()));
             }

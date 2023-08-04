@@ -37,6 +37,12 @@ public class ProductController {
         return new ResponseEntity<>(productDTOPage, HttpStatus.OK);
     }
 
+    @PostMapping("/shop/{vendorId}")
+    public ResponseEntity<Page<ProductDTO>> getProductDTOByVendor(@RequestParam(defaultValue = "0") int page,@PathVariable int vendorId){
+        Account account = iAccountService.getById(vendorId);
+        Page<ProductDTO> productDTOPage = iProductService.getAllDTOByCurrentVendor(PageRequest.of(page, 2), account);
+        return new ResponseEntity<>(productDTOPage, HttpStatus.OK);
+    }
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         return new ResponseEntity<>(iProductService.create(product), HttpStatus.OK);
