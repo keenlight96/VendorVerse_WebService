@@ -50,4 +50,5 @@ public class AccountController {
         AccountToken accountToken = new AccountToken(account.getId(), account.getUsername(), token, account.getAvatar(), account.getRole());
         return accountToken;
     }
+
 }
