@@ -59,6 +59,11 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
+    public List<Account> getReceiversOfAccountId(int accountId) {
+        return iAccountRepository.getReceiversOfAccountId(accountId);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = iAccountRepository.findByUsername(username);
         List<GrantedAuthority> roles = new ArrayList<>();
@@ -70,4 +75,6 @@ public class AccountServiceImpl implements IAccountService {
     public Account getAccountByUsername(String username) {
         return iAccountRepository.findByUsername(username);
     }
+
+
 }
