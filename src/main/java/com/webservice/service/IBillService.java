@@ -11,5 +11,6 @@ public interface IBillService extends ICrudService<Bill> {
     List<Bill> getAllByVendor(Account vendor);
     Bill acceptBill(int id);
     Bill rejectBill(int id);
+    List<Bill> getBillCustomerByStatus(Account customer,int statusId);
 
 }

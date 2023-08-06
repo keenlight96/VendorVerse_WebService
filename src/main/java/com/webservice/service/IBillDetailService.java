@@ -17,4 +17,6 @@ public interface IBillDetailService extends ICrudService<BillDetail> {
     void updateQuantity(int quantity, int id);
     Bill payTheBill(int idBill);
     List<BillDetailDTO> getBillDetailDtoByBill(Bill bill);
+
+    BillDetail findByBillAndProductId(Bill bill, int productId);
 }

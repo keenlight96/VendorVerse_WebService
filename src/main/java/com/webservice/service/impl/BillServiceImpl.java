@@ -70,6 +70,10 @@ public class BillServiceImpl implements IBillService {
         bill.setStatus(new BillStatus(4));
         return iBillRepository.save(bill);
     }
+    @Override
+    public List<Bill> getBillCustomerByStatus(Account customer, int statusId) {
+        return iBillRepository.findAllByCustomerAndStatusId(customer, statusId);
+    }
 
 
 }

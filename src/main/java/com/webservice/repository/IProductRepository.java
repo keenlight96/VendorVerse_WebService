@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Integer> {
+    Product findById(int id);
     List<Product> findAllByAccount(Account account);
     Page<Product> findAllByAccount(Pageable pageable, Account account);
 }
