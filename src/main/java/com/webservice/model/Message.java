@@ -9,20 +9,15 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-public class Account {
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String username;
-    private String password;
-    private String avatar;
-    private Date birthday;
-    private String phoneNumber;
     @ManyToOne
-    private Role role;
+    Account sender;
     @ManyToOne
-    private AccountStatus status;
-
-
+    Account receiver;
+    @Lob
+    String message;
 
 }

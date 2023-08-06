@@ -18,4 +18,5 @@ public interface IAccountService extends UserDetailsService {
     Account getAccountByUsername(String username);
 
     Account getAccountLogin(String username, String password);
+    List<Account> getReceiversOfAccountId(int accountId);
 }

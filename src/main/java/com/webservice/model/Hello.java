@@ -1,16 +1,18 @@
 package com.webservice.model;
 
+import com.webservice.model.Message;
+
 public class Hello {
-    private String greeting;
-    public Hello(String greeting) {
+    private Message greeting;
+    public Hello(Message greeting) {
         this.greeting = greeting;
     }
 
-    public void setGreeting(String greeting) {
+    public void setGreeting(Message greeting) {
         this.greeting = greeting;
     }
 
-    public String getGreeting() {
+    public Message getGreeting() {
         return this.greeting;
     }
 }
