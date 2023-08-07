@@ -25,13 +25,13 @@ public class ImageServiceImpl implements IImageService {
     }
 
     @Override
-    public Image create(Image account) {
-        return iImageRepository.save(account);
+    public Image create(Image image) {
+        return iImageRepository.save(image);
     }
 
     @Override
-    public Image edit(Image account) {
-        return iImageRepository.save(account);
+    public Image edit(Image image) {
+        return iImageRepository.save(image);
     }
 
     @Override
@@ -46,5 +46,10 @@ public class ImageServiceImpl implements IImageService {
             return null;
         else
             return images.get(0);
+    }
+
+    @Override
+    public List<Image> getAllImageByProduct(Product product) {
+        return iImageRepository.findByProduct(product);
     }
 }

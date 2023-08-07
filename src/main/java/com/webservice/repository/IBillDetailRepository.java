@@ -25,5 +25,7 @@ public interface IBillDetailRepository extends JpaRepository<BillDetail, Integer
     @Modifying
     @Query("update BillDetail bd set bd.quantity = :quantity WHERE bd.id = :id")
     void updateQuantity(@Param("quantity") int quantity,@Param("id") int id);
+    @Query("SELECT b FROM BillDetail b WHERE b.bill = :bill AND b.product.id = :productId")
+    BillDetail findByBillAndProductId(Bill bill, int productId);
 
 }
