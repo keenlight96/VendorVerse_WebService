@@ -35,6 +35,13 @@ public class ProductController {
     @Autowired
     IReviewService iReviewService;
 
+    @GetMapping("/vendor/{id}")
+    public ResponseEntity<List<ProductDTO>> getAllProductDTOByIdVendor(@PathVariable int id) {
+        Account account = iAccountService.getById(id);
+        List<ProductDTO> productDTOS = iProductService.getAllProductDTOByCurrentVendor(account);
+        return new ResponseEntity<>(productDTOS, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<Page<Product>> getAll(@RequestParam(defaultValue = "0") int page) {
         Page<Product> productPage = iProductService.getAll(PageRequest.of(page, 2));

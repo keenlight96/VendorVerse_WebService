@@ -47,6 +47,11 @@ public class BillServiceImpl implements IBillService {
     }
 
     @Override
+    public List<Bill> getAllByCustomer(Account customer) {
+        return iBillRepository.findAllByCustomer(customer);
+    }
+
+    @Override
     public List<Bill> findByCustomerAndVendor(Account customer, Account vendor, int idStatus) {
         List<Bill> bills = iBillRepository.findAllByCustomerAndVendorAndStatusId(customer, vendor, idStatus);
         return bills;

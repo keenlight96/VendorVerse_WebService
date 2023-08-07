@@ -22,7 +22,8 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/billDetail")
 public class BillDetailController {
-
+    @Autowired
+    IBillService iBillService;
     @Autowired
     IBillDetailService iBillDetailService;
     @Autowired
@@ -47,6 +48,12 @@ public class BillDetailController {
     public ResponseEntity<?> deleteProductByCart(@RequestParam int idBillDetail) {
         iBillDetailService.deleteById(idBillDetail);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/getByBill/{id}")
+    public List<BillDetailDTO> getByBill(@PathVariable int id) {
+        Bill bill = iBillService.getById(id);
+        return iBillDetailService.getBillDetailDtoByBill(bill);
     }
 
     @PostMapping("/getByBill")

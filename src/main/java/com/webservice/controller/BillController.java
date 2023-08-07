@@ -25,6 +25,20 @@ public class BillController {
 
     @Autowired
     IBillDetailService iBillDetailService;
+    @GetMapping("/vendor/{id}")
+    public ResponseEntity<List<Bill>> getAllBillOfVendor(@PathVariable int id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
+        account.setId(id);
+        return new ResponseEntity<>(iBillService.getAllByVendor(account), HttpStatus.OK);
+    }
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<List<Bill>> getAllBillOfCustomer(@PathVariable int id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountService.getAccountByUsername(userDetails.getUsername());
+        account.setId(id);
+        return new ResponseEntity<>(iBillService.getAllByCustomer(account), HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<List<Bill>> getAll() {
