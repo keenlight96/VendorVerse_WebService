@@ -148,4 +148,9 @@ public class BillDetailServiceImpl implements IBillDetailService {
         }
         return billDetailDTOs;
     }
+
+    @Override
+    public BillDetail findByBillAndProductId(Bill bill, int productId) {
+        return iBillDetailRepository.findByBillAndProductId(bill, productId);
+    }
 }

@@ -1,10 +1,14 @@
 package com.webservice.controller;
 
+import com.webservice.model.Account;
 import com.webservice.model.Review;
+import com.webservice.service.IAccountService;
 import com.webservice.service.IReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +19,8 @@ import java.util.List;
 public class ReviewController {
     @Autowired
     IReviewService iReviewService;
+    @Autowired
+    IAccountService iAccountService;
 
     @GetMapping
     public ResponseEntity<List<Review>> getAll() {
@@ -23,7 +29,10 @@ public class ReviewController {
 
     @PostMapping
     public ResponseEntity<Review> createReview(@RequestBody Review review) {
-        return new ResponseEntity<>(iReviewService.create(review), HttpStatus.OK);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account customer = iAccountService.getAccountByUsername(userDetails.getUsername());
+        iReviewService.save(customer,review);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @PutMapping

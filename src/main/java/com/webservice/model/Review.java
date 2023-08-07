@@ -17,5 +17,6 @@ public class Review {
     @ManyToOne
     private Account customer;
     private int rating;
+    @Lob
     private String content;
 }
