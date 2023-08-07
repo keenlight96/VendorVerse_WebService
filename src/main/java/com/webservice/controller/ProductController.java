@@ -10,6 +10,7 @@ import com.webservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @CrossOrigin("*")
@@ -48,11 +50,18 @@ public class ProductController {
     }
 
     @PostMapping("/shop/{vendorId}")
-    public ResponseEntity<Page<ProductDTO>> getProductDTOByVendor(@RequestParam(defaultValue = "0") int page, @PathVariable int vendorId) {
+    public ResponseEntity<Page<ProductDTO>> getProductDTOByVendor(@RequestParam(defaultValue = "0") int page,@PathVariable int vendorId){
         Account account = iAccountService.getById(vendorId);
         Page<ProductDTO> productDTOPage = iProductService.getAllDTOByCurrentVendor(PageRequest.of(page, 18), account);
         return new ResponseEntity<>(productDTOPage, HttpStatus.OK);
     }
+
+    @PostMapping("/shop")
+    public ResponseEntity<Page<ProductDTO>> getAllDTO(@RequestParam(defaultValue = "0") int page) {
+        Page<ProductDTO> products = iProductService.getAllProductDTO(PageRequest.of(page, 4));
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
 
     @PostMapping("/searchByProductName")
     public ResponseEntity<Page<ProductDTO>> getProductDTOByLikeName(@RequestParam(defaultValue = "0") int page, @RequestParam String name) {
