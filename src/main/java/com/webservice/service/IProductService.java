@@ -12,4 +12,5 @@ public interface IProductService extends ICrudService<Product> {
     Page<ProductDTO> getAllDTOByCurrentVendor(Pageable pageable, Account account);
     ProductDTO convertToProductDTO(Product product);
     ProductDetailDTO getProductDetail(int productId);
+    Page<ProductDTO> getAllByNameLike(String name, Pageable pageable);
 }

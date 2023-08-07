@@ -50,7 +50,13 @@ public class ProductController {
     @PostMapping("/shop/{vendorId}")
     public ResponseEntity<Page<ProductDTO>> getProductDTOByVendor(@RequestParam(defaultValue = "0") int page, @PathVariable int vendorId) {
         Account account = iAccountService.getById(vendorId);
-        Page<ProductDTO> productDTOPage = iProductService.getAllDTOByCurrentVendor(PageRequest.of(page, 2), account);
+        Page<ProductDTO> productDTOPage = iProductService.getAllDTOByCurrentVendor(PageRequest.of(page, 18), account);
+        return new ResponseEntity<>(productDTOPage, HttpStatus.OK);
+    }
+
+    @PostMapping("/searchByProductName")
+    public ResponseEntity<Page<ProductDTO>> getProductDTOByLikeName(@RequestParam(defaultValue = "0") int page, @RequestParam String name) {
+       Page<ProductDTO> productDTOPage = iProductService.getAllByNameLike(name,PageRequest.of(page, 18));
         return new ResponseEntity<>(productDTOPage, HttpStatus.OK);
     }
 

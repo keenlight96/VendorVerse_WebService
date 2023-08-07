@@ -94,4 +94,10 @@ public class ProductServiceImpl implements IProductService {
 
         return productDetailDTO;
     }
+    @Override
+    public Page<ProductDTO> getAllByNameLike(String name, Pageable pageable) {
+        Page<Product> productPage = iProductRepository.findAllByNameLike('%' + name + '%',pageable);
+        Page<ProductDTO> productDTOPage = productPage.map(this::convertToProductDTO);
+        return productDTOPage;
+    }
 }
