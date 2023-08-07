@@ -23,6 +23,10 @@ public class LoginController {
     @Autowired
     IAccountService accountService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "test successfully";
+    }
 
     @PostMapping("/login")
     public AccountToken getLogin(@RequestBody Account account){
