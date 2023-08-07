@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -52,6 +54,13 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Page<Product> getAll(Pageable pageable) {
         return iProductRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<ProductDTO> getAllProductDTO(Pageable pageable) {
+        Page<Product> productPage = iProductRepository.findAll(pageable);
+        Page<ProductDTO> productDTOPage = productPage.map(this::convertToProductDTO);
+        return productDTOPage;
     }
 
     @Override
