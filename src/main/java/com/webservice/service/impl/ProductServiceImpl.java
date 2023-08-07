@@ -1,7 +1,6 @@
 package com.webservice.service.impl;
 
 import com.webservice.model.Account;
-import com.webservice.model.Image;
 import com.webservice.model.Product;
 import com.webservice.model.dto.ProductDTO;
 import com.webservice.repository.IBillDetailRepository;
@@ -13,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -50,6 +51,19 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public List<ProductDTO> getAllProductDTOByCurrentVendor(Account account) {
+        List<Product> products = iProductRepository.findAllByAccount(account);
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        for (Product product : products) {
+            ProductDTO productDTO = new ProductDTO(product.getId(), product.getName(), product.getQuantity(),
+                    product.getPrice(), product.getDescription(), iImageService.getImageByProduct(product));
+
+            productDTOS.add(productDTO);
+        }
+        return productDTOS;
+    }
+
+    @Override
     public Page<Product> getAll(Pageable pageable) {
         return iProductRepository.findAll(pageable);
     }
@@ -64,7 +78,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ProductDTO convertToProductDTO(Product product) {
         ProductDTO productDTO = new ProductDTO(product.getId(), product.getName(), product.getQuantity(),
-                product.getPrice(), product.getDescription(),product.getCategory(),product.getAccount());
+                product.getPrice(), product.getDescription(), product.getCategory(), product.getAccount());
         productDTO.setImage(iImageService.getImageByProduct(product));
         productDTO.setSold(iBillDetailRepository.countBillDetailByProduct(product));
         productDTO.setCommission(productDTO.getPrice() * productDTO.getSold());

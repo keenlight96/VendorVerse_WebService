@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/product")
@@ -22,6 +24,13 @@ public class ProductController {
     IProductService iProductService;
     @Autowired
     IAccountService iAccountService;
+
+    @GetMapping("/vendor/{id}")
+    public ResponseEntity<List<ProductDTO>> getAllProductDTOByIdVendor(@PathVariable int id) {
+        Account account = iAccountService.getById(id);
+        List<ProductDTO> productDTOS = iProductService.getAllProductDTOByCurrentVendor(account);
+        return new ResponseEntity<>(productDTOS, HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<Page<Product>> getAll(@RequestParam(defaultValue = "0") int page) {
