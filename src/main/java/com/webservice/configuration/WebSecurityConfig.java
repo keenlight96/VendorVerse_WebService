@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/**");
-        http.authorizeRequests().antMatchers("/temp/login", "/login", "/register","/hello", "/gkz-stomp-endpoint/websocket", "/message**", "/test","/product/shop/", "/product/productDetail").permitAll()
+        http.authorizeRequests().antMatchers("/temp/login", "/login", "/register","/hello", "/gkz-stomp-endpoint/websocket", "/test","/product/shop/", "/product/productDetail").permitAll()
                 .antMatchers("/category**").hasRole("ADMIN")
                 .antMatchers("/product**").hasAnyRole("ADMIN","VENDOR")
                 .antMatchers("/billDetail**").hasRole("CUSTOMER")

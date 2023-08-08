@@ -1,6 +1,7 @@
 package com.webservice.service.impl;
 
 import com.webservice.model.Account;
+import com.webservice.model.Image;
 import com.webservice.model.Product;
 import com.webservice.model.Review;
 import com.webservice.model.dto.ProductDTO;
